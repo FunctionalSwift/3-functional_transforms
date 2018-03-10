@@ -32,7 +32,9 @@ for db in databases {
 }
 
 let hosts = userDatabase
-    .map { ($0["email"] as? String)?.components(separatedBy: "@").last
+    .map { ($0["email"] as? String)?.components(separatedBy: "@").last }
+    .filter { $0 != nil }
+    .map { $0! }
 
 typealias HostInfo = (count: Int, age: Int)
 
