@@ -64,9 +64,7 @@ func hostInfo(database: JsonArray) -> (String) -> HostInfo {
 
 let hostsInfo = hosts.map(hostInfo(database: userDatabase))
 
-let result = zip(hosts, hostsInfo)
-
-for (host, info) in result {
+zip(hosts, hostsInfo).forEach { host, info in
     print("Host: \(host)")
     print("  - Count: \(info.count) users")
     print("  - Average age: \(info.age) years old")
