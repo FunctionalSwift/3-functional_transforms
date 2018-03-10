@@ -62,10 +62,8 @@ func hostInfo(db: JsonArray, host: String) -> HostInfo {
     return HostInfo(count: count, age: age / count)
 }
 
-var hostsInfo = [HostInfo]()
-
-for host in uniqueHosts {
-    hostsInfo.append(hostInfo(db: userDatabase, host: host))
+let hostsInfo = uniqueHosts.map {
+    hostInfo(db: userDatabase, host: $0)
 }
 
 for i in 0..<uniqueHosts.count {
