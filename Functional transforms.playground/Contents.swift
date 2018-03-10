@@ -5,6 +5,14 @@ import Foundation
 public typealias JsonObject = [String: AnyObject]
 public typealias JsonArray = [JsonObject]
 
+public extension Array where Element: Hashable {
+    func unique() -> [Element] {
+        return self.reduce([Element]()) { accumulator, element in
+            accumulator.contains(element) ? accumulator : accumulator + [element]
+        }
+    }
+}
+
 func json(path: String) -> JsonArray {
     guard
         let path = Bundle.main.path(forResource: path, ofType: "json"),
@@ -39,8 +47,7 @@ let hosts = userDatabase
     .map (getHost)
     .filter { $0 != nil }
     .map { $0! }
-    .reduce([]) { accumulator, host in
-        accumulator.contains(host) ? accumulator : accumulator + [host] }
+    .unique()
 
 typealias HostInfo = (count: Int, age: Int)
 
