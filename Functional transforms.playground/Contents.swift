@@ -31,16 +31,8 @@ for db in databases {
     userDatabase.append(contentsOf: db)
 }
 
-var hosts = [String]()
-
-for user in userDatabase {
-    if let email = user["email"] as? String,
-        let host = email.components(separatedBy: "@").last,
-        !hosts.contains(host) {
-        
-        hosts.append(host)
-    }
-}
+let hosts = userDatabase
+    .map { ($0["email"] as? String)?.components(separatedBy: "@").last
 
 typealias HostInfo = (count: Int, age: Int)
 
