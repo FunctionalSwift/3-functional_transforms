@@ -39,14 +39,8 @@ let hosts = userDatabase
     .map (getHost)
     .filter { $0 != nil }
     .map { $0! }
-
-var uniqueHosts = [String]()
-
-for host in hosts {
-    if !uniqueHosts.contains(host) {
-        uniqueHosts.append(host)
-    }
-}
+    .reduce([]) { accumulator, host in
+        accumulator.contains(host) ? accumulator : accumulator + [host] }
 
 typealias HostInfo = (count: Int, age: Int)
 
@@ -67,10 +61,10 @@ func hostInfo(database: JsonArray) -> (String) -> HostInfo {
     }
 }
 
-let hostsInfo = uniqueHosts.map(hostInfo(database: userDatabase))
+let hostsInfo = hosts.map(hostInfo(database: userDatabase))
 
-for i in 0..<uniqueHosts.count {
-    print("Host: \(uniqueHosts[i])")
+for i in 0..<hosts.count {
+    print("Host: \(hosts[i])")
     print("  - Count: \(hostsInfo[i].count) users")
     print("  - Average age: \(hostsInfo[i].age) years old")
 }
