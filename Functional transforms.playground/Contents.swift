@@ -46,25 +46,26 @@ for host in hosts {
 
 typealias HostInfo = (count: Int, age: Int)
 
-func hostInfo(db: JsonArray, host: String) -> HostInfo {
-    var count = 0
-    var age = 0
-    
-    for user in db {
-        if let email = user["email"] as? String,
-            let userHost = email.components(separatedBy: "@").last,
-            let userAge = user["age"] as? Int, userHost == host {
-            count += 1
-            age += userAge
+func hostInfo(database: JsonArray) -> (String) -> HostInfo {
+    return { host in
+        var count = 0
+        var age = 0
+        
+        for user in database {
+            if let email = user["email"] as? String,
+                let userHost = email.components(separatedBy: "@").last,
+                let userAge = user["age"] as? Int, userHost == host {
+                
+                count += 1
+                age += userAge
+            }
         }
+        
+        return HostInfo(count: count, age: age / count)
     }
-    
-    return HostInfo(count: count, age: age / count)
 }
 
-let hostsInfo = uniqueHosts.map {
-    hostInfo(db: userDatabase, host: $0)
-}
+let hostsInfo = uniqueHosts.map(hostInfo(database: userDatabase))
 
 for i in 0..<uniqueHosts.count {
     print("Host: \(uniqueHosts[i])")
