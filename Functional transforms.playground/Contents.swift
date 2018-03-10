@@ -33,20 +33,14 @@ var databases: [JsonArray] {
     ]
 }
 
-var userDatabase = JsonArray()
-
-for db in databases {
-    userDatabase.append(contentsOf: db)
-}
+let userDatabase = databases.flatMap{$0}
 
 func getHost(user: JsonObject) -> String? {
     return (user["email"] as? String)?.components(separatedBy: "@").last
 }
 
 let hosts = userDatabase
-    .map (getHost)
-    .filter { $0 != nil }
-    .map { $0! }
+    .flatMap (getHost)
     .unique()
 
 typealias HostInfo = (count: Int, age: Int)
