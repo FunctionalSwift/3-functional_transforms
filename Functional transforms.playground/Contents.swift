@@ -64,8 +64,13 @@ func hostInfo(database: JsonArray) -> (String) -> HostInfo {
 
 let hostsInfo = hosts.map(hostInfo(database: userDatabase))
 
-zip(hosts, hostsInfo).forEach { host, info in
-    print("Host: \(host)")
-    print("  - Count: \(info.count) users")
-    print("  - Average age: \(info.age) years old")
+zip(hosts, hostsInfo)
+    .sorted { (host1, host2) -> Bool in
+        return host1.0 < host2.0
+    }
+    .forEach { host, info in
+        print("Host: \(host)")
+        print("  - Count: \(info.count) users")
+        print("  - Average age: \(info.age) years old")
 }
+
