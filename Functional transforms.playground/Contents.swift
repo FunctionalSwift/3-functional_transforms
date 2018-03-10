@@ -25,8 +25,6 @@ var databases: [JsonArray] {
     ]
 }
 
-print(databases)
-
 var userDatabase = JsonArray()
 
 for db in databases {
@@ -44,7 +42,9 @@ for user in userDatabase {
     }
 }
 
-func hostInfo(db: JsonArray, host: String) -> (Int, Int) {
+typealias HostInfo = (count: Int, age: Int)
+
+func hostInfo(db: JsonArray, host: String) -> HostInfo {
     var count = 0
     var age = 0
     
@@ -52,11 +52,10 @@ func hostInfo(db: JsonArray, host: String) -> (Int, Int) {
         if let email = user["email"] as? String,
             let userHost = email.components(separatedBy: "@").last,
             let userAge = user["age"] as? Int, userHost == host {
-            
             count += 1
             age += userAge
         }
     }
     
-    return (count, age / count)
+    return HostInfo(count: count, age: age / count)
 }
